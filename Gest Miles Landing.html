@@ -1,0 +1,1525 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gest Miles — Gestão de milhas e pontos de fidelidade</title>
+<meta name="description" content="Organize suas milhas e pontos, acompanhe vencimentos, encontre as melhores datas para voar e nunca mais perca uma oportunidade de bônus." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #F7F7F8;
+  --surface: #FFFFFF;
+  --ink: #1F1F1F;
+  --ink-2: #6B6B6B;
+  --line: #ECECEC;
+  --line-2: #F2F2F4;
+  --primary: #8A05BE;
+  --primary-dark: #6A00A3;
+  --primary-soft: #B56CFF;
+  --primary-50: #FBF4FF;
+  --primary-100: #F2E2FF;
+  --grad: linear-gradient(135deg, #8A05BE 0%, #9E2FD4 50%, #B56CFF 100%);
+  --grad-soft: linear-gradient(135deg, #FBF4FF 0%, #F2E2FF 100%);
+  --shadow-sm: 0 1px 2px rgba(15, 5, 25, 0.04), 0 2px 6px rgba(15, 5, 25, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 5, 25, 0.06), 0 8px 28px rgba(15, 5, 25, 0.06);
+  --shadow-lg: 0 10px 30px rgba(80, 0, 120, 0.10), 0 30px 80px rgba(80, 0, 120, 0.10);
+  --shadow-purple: 0 18px 48px rgba(138, 5, 190, 0.28);
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 18px;
+  --r-xl: 24px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, h4 { font-family: "Space Grotesk", sans-serif; font-weight: 600; letter-spacing: -0.02em; margin: 0; color: var(--ink); }
+h1 { font-size: clamp(40px, 6.4vw, 76px); line-height: 1.02; letter-spacing: -0.035em; }
+h2 { font-size: clamp(28px, 3.6vw, 48px); line-height: 1.08; letter-spacing: -0.028em; }
+h3 { font-size: 20px; line-height: 1.25; }
+p { margin: 0; color: var(--ink-2); }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: 0; background: none; }
+
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ============ NAV ============ */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: saturate(140%) blur(14px);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
+  background: rgba(247, 247, 248, 0.78);
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s ease, background .2s ease;
+}
+.nav.scrolled { border-color: var(--line); background: rgba(247, 247, 248, 0.92); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
+.brand-mark {
+  width: 30px; height: 30px; border-radius: 9px;
+  background: var(--grad);
+  display: grid; place-items: center;
+  box-shadow: 0 6px 14px rgba(138, 5, 190, 0.35);
+  position: relative;
+}
+.brand-mark::after {
+  content: ""; position: absolute; inset: 6px;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.6), transparent 55%);
+  border-radius: 6px;
+}
+.brand-mark svg { position: relative; z-index: 1; }
+.nav-links { display: none; gap: 28px; font-size: 14px; color: var(--ink-2); }
+.nav-links a { transition: color .15s ease; }
+.nav-links a:hover { color: var(--ink); }
+@media (min-width: 880px) { .nav-links { display: flex; } }
+.nav-cta { display: flex; align-items: center; gap: 10px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 18px;
+  border-radius: 999px;
+  font-weight: 500; font-size: 14.5px;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+  white-space: nowrap;
+}
+.btn-primary { background: var(--grad); color: #fff; box-shadow: var(--shadow-purple); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 22px 56px rgba(138, 5, 190, 0.34); }
+.btn-ghost { color: var(--ink); border: 1px solid var(--line); background: var(--surface); }
+.btn-ghost:hover { border-color: #d5d5da; }
+.btn-link { color: var(--ink); padding: 10px 4px; font-size: 14.5px; }
+.btn-link:hover { color: var(--primary); }
+.btn-lg { padding: 14px 22px; font-size: 15.5px; }
+.btn .arrow { transition: transform .2s ease; }
+.btn:hover .arrow { transform: translateX(2px); }
+
+/* ============ HERO ============ */
+.hero { padding: 64px 0 40px; position: relative; overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; inset: -20% -10% auto -10%; height: 720px;
+  background:
+    radial-gradient(ellipse 60% 60% at 80% 20%, rgba(181, 108, 255, 0.16), transparent 60%),
+    radial-gradient(ellipse 60% 60% at 10% 30%, rgba(138, 5, 190, 0.10), transparent 60%);
+  pointer-events: none; z-index: 0;
+}
+.hero-grid { display: grid; gap: 56px; position: relative; z-index: 1; }
+@media (min-width: 980px) { .hero-grid { grid-template-columns: 1.05fr 1fr; align-items: center; gap: 72px; } }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 14px 6px 8px;
+  font-size: 13px; color: var(--ink-2);
+  box-shadow: var(--shadow-sm);
+}
+.eyebrow .dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--grad);
+  display: grid; place-items: center;
+  color: #fff; font-size: 11px; font-weight: 600;
+}
+.hero h1 { margin: 22px 0 20px; }
+.hero h1 .grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.hero-sub { font-size: 18px; line-height: 1.55; max-width: 540px; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; align-items: center; }
+.hero-trust { display: flex; align-items: center; gap: 14px; margin-top: 28px; font-size: 13.5px; color: var(--ink-2); }
+.hero-trust .stack { display: flex; }
+.hero-trust .stack span {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid var(--bg);
+  margin-left: -8px;
+  background: var(--grad);
+  display: grid; place-items: center;
+  font-size: 11px; color: #fff; font-weight: 600;
+}
+.hero-trust .stack span:nth-child(1) { background: linear-gradient(135deg, #8A05BE, #B56CFF); margin-left: 0; }
+.hero-trust .stack span:nth-child(2) { background: linear-gradient(135deg, #6A00A3, #9E2FD4); }
+.hero-trust .stack span:nth-child(3) { background: linear-gradient(135deg, #B56CFF, #8A05BE); }
+.hero-trust .stack span:nth-child(4) { background: linear-gradient(135deg, #9E2FD4, #6A00A3); }
+
+/* ============ HERO MOCKUP ============ */
+.mockup-stage {
+  position: relative;
+  aspect-ratio: 1 / 1.1;
+  width: 100%;
+  max-width: 580px;
+  margin: 0 auto;
+  perspective: 2200px;
+  perspective-origin: 50% 45%;
+}
+.mockup-stage::before {
+  content: ""; position: absolute;
+  width: 78%; height: 78%; left: 11%; top: 11%;
+  background: var(--grad);
+  filter: blur(90px); opacity: .38;
+  border-radius: 50%;
+  z-index: 0;
+}
+/* subtle reflective floor under the device */
+.mockup-stage::after {
+  content: ""; position: absolute;
+  left: 18%; right: 18%; bottom: 4%; height: 60px;
+  background: radial-gradient(ellipse at center, rgba(60, 0, 90, .35), transparent 70%);
+  filter: blur(20px);
+  z-index: 1;
+}
+/* ---------- iPhone Pro — titanium frame, 3D tilt ---------- */
+.phone {
+  position: absolute;
+  width: 58%;
+  aspect-ratio: 9 / 19.3;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%) rotateY(-19deg) rotateX(5deg) rotateZ(-2deg);
+  transform-style: preserve-3d;
+  /* titanium gradient */
+  background:
+    linear-gradient(135deg,
+      #8d8a92 0%,
+      #d8d4dc 8%,
+      #b4b0b8 18%,
+      #ece8f0 30%,
+      #a8a4ac 42%,
+      #d4d0d8 56%,
+      #908c94 72%,
+      #c0bcc4 88%,
+      #7e7a82 100%);
+  border-radius: 54px;
+  padding: 4px;
+  box-shadow:
+    /* outer hairline */
+    inset 0 0 0 0.5px rgba(255,255,255,.55),
+    inset 1px 0 1px rgba(255,255,255,.45),
+    inset -1px 0 1px rgba(0,0,0,.25),
+    /* drop shadows */
+    -10px 18px 30px rgba(40, 0, 70, .14),
+    -22px 40px 70px rgba(60, 0, 90, .22),
+    -50px 80px 140px rgba(138, 5, 190, .22);
+  z-index: 2;
+  transition: transform .9s cubic-bezier(.2,.8,.2,1);
+}
+.phone:hover {
+  transform: translate(-50%, -50%) rotateY(-12deg) rotateX(3deg) rotateZ(-1deg);
+}
+/* extra titanium sheen — a vertical highlight band that sweeps subtly */
+.phone::after {
+  content: ""; position: absolute; inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(100deg,
+    transparent 30%,
+    rgba(255,255,255,.25) 42%,
+    rgba(255,255,255,.05) 50%,
+    transparent 62%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+/* visible left side-rail: gives the device real thickness */
+.phone::before {
+  content: ""; position: absolute;
+  left: -7px; top: 22px; bottom: 22px; width: 8px;
+  background: linear-gradient(90deg,
+    #4a464e 0%,
+    #807c84 30%,
+    #a8a4ac 60%,
+    #c8c4cc 100%);
+  border-radius: 4px 0 0 4px;
+  transform: translateZ(-3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    inset 0 -1px 0 rgba(0,0,0,.5),
+    -2px 0 6px rgba(0,0,0,.18);
+}
+/* hardware buttons on the visible (left) edge */
+.phone .btn-vol, .phone .btn-pow, .phone .btn-act {
+  position: absolute;
+  left: -8px;
+  width: 4px;
+  background: linear-gradient(90deg, #3a363e 0%, #6a666e 60%, #908c94 100%);
+  border-radius: 2px 0 0 2px;
+  transform: translateZ(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    inset 0 -1px 0 rgba(0,0,0,.6),
+    -1px 0 2px rgba(0,0,0,.25);
+}
+.phone .btn-act { top: 14%; height: 4.4%; }
+.phone .btn-vol { top: 22%; height: 8.5%; }
+.phone .btn-pow { top: 32%; height: 8.5%; }
+
+.phone-screen {
+  width: 100%; height: 100%;
+  background: #ffffff;
+  /* inner black bezel */
+  border: 7px solid #050008;
+  border-radius: 50px;
+  overflow: hidden;
+  position: relative;
+  display: flex; flex-direction: column;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255,255,255,.12),
+    0 0 0 0.5px rgba(0,0,0,.6);
+}
+/* dynamic island — floats above status bar */
+.phone-screen::before {
+  content: ""; position: absolute;
+  top: 10px; left: 50%; transform: translateX(-50%);
+  width: 96px; height: 30px;
+  background: #050008;
+  border-radius: 24px;
+  z-index: 10;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.04),
+    0 1px 0 rgba(255,255,255,.06);
+}
+/* tiny camera dot inside the island */
+.phone-screen::after {
+  content: ""; position: absolute;
+  top: 18px; left: calc(50% + 28px);
+  width: 9px; height: 9px;
+  background: radial-gradient(circle at 35% 30%, #4a3a5a, #1a0a25 60%, #050008 100%);
+  border-radius: 50%;
+  z-index: 11;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.06),
+    inset 0 0 2px rgba(110,80,140,.6);
+}
+/* glossy diagonal screen reflection */
+.phone-screen .gloss {
+  position: absolute; inset: 0;
+  background: linear-gradient(118deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0) 38%,
+    rgba(255,255,255,.22) 48%,
+    rgba(255,255,255,.06) 56%,
+    rgba(255,255,255,0) 70%);
+  pointer-events: none; z-index: 20;
+  border-radius: inherit;
+}
+.phone-status { display: flex; justify-content: space-between; align-items: center; padding: 22px 28px 4px; font-size: 11.5px; font-weight: 600; color: var(--ink); position: relative; z-index: 5; }
+.phone-status .icons { display: flex; gap: 4px; }
+.phone-status .icons span {
+  display: inline-block; width: 14px; height: 8px;
+  background: var(--ink); border-radius: 2px; opacity: .9;
+}
+.phone-status .icons span:nth-child(1) { width: 4px; }
+.phone-status .icons span:nth-child(2) { width: 8px; clip-path: polygon(0 100%, 100% 100%, 100% 0); }
+.phone-status .icons span:nth-child(3) { width: 18px; border-radius: 3px; }
+.phone-header { padding: 18px 18px 14px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 5; }
+.phone-header .greet { font-size: 13px; color: var(--ink-2); }
+.phone-header .name { font-family: "Space Grotesk"; font-weight: 600; font-size: 17px; letter-spacing: -0.01em; }
+.phone-header .avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--grad);
+  display: grid; place-items: center;
+  color: #fff; font-size: 12px; font-weight: 600;
+}
+.phone-balance {
+  margin: 4px 14px 12px;
+  background: var(--grad);
+  border-radius: 18px;
+  padding: 16px 18px;
+  color: #fff;
+  position: relative; overflow: hidden;
+  box-shadow: 0 14px 30px rgba(138, 5, 190, .35);
+}
+.phone-balance::after {
+  content: ""; position: absolute; right: -40px; top: -50px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.18), transparent 70%);
+}
+.phone-balance .label { font-size: 11px; opacity: .85; letter-spacing: .04em; text-transform: uppercase; }
+.phone-balance .value { font-family: "Space Grotesk"; font-weight: 600; font-size: 28px; letter-spacing: -0.02em; margin-top: 6px; }
+.phone-balance .delta { font-size: 11.5px; opacity: .9; margin-top: 4px; display: flex; align-items: center; gap: 6px; }
+.phone-balance .delta::before { content: "▲"; font-size: 9px; }
+
+.phone-section-title { padding: 4px 18px; font-size: 11px; font-weight: 600; color: var(--ink-2); letter-spacing: .04em; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
+.phone-section-title .more { color: var(--primary); font-weight: 500; text-transform: none; letter-spacing: 0; font-size: 11px;}
+
+.phone-progs { padding: 8px 14px 0; display: flex; flex-direction: column; gap: 8px; }
+.prog {
+  background: #fff; border: 1px solid var(--line);
+  border-radius: 14px; padding: 11px 12px;
+  display: grid; grid-template-columns: 32px 1fr auto; gap: 10px; align-items: center;
+}
+.prog .logo {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: grid; place-items: center;
+  font-family: "Space Grotesk"; font-weight: 700; font-size: 12px; color: #fff;
+  letter-spacing: -0.02em;
+}
+.prog .name { font-size: 12.5px; font-weight: 500; color: var(--ink); }
+.prog .meta { font-size: 10.5px; color: var(--ink-2); margin-top: 1px; }
+.prog .pts { font-family: "Space Grotesk"; font-weight: 600; font-size: 13px; color: var(--ink); text-align: right; letter-spacing: -0.01em; }
+.prog .pts small { display: block; font-weight: 400; font-size: 10px; color: var(--ink-2); }
+
+.phone-foot {
+  margin-top: auto;
+  border-top: 1px solid var(--line);
+  display: flex; justify-content: space-around; padding: 12px 0 18px;
+}
+.phone-foot .tab {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  color: var(--ink-2); font-size: 9.5px;
+}
+.phone-foot .tab.active { color: var(--primary); }
+.phone-foot .tab .ic { width: 18px; height: 18px; border-radius: 4px; background: currentColor; opacity: .9; }
+.phone-foot .tab.active .ic { background: var(--primary); }
+
+/* floating cards behind phone */
+.float-card {
+  position: absolute;
+  background: #fff;
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--line);
+  display: flex; align-items: center; gap: 10px;
+  z-index: 3;
+  font-size: 13px;
+  animation: float 6s ease-in-out infinite;
+}
+.float-card .ic-c {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: var(--grad-soft);
+  display: grid; place-items: center;
+  color: var(--primary);
+}
+.float-card .label { font-size: 11px; color: var(--ink-2); }
+.float-card .val { font-family: "Space Grotesk"; font-weight: 600; font-size: 14px; letter-spacing: -0.01em; }
+.float-card { transform-style: preserve-3d; }
+.float-1 { left: 0; top: 14%; animation-delay: 0s; transform: rotate(-4deg); }
+.float-2 { right: -2%; top: 44%; animation-delay: -2s; transform: rotate(3deg); }
+.float-3 { left: 6%; bottom: 8%; animation-delay: -4s; transform: rotate(-2deg); }
+@keyframes float {
+  0%, 100% { transform: translateY(0) var(--rot, rotate(0)); }
+  50% { transform: translateY(-8px) var(--rot, rotate(0)); }
+}
+.float-1 { --rot: rotate(-4deg); }
+.float-2 { --rot: rotate(3deg); }
+.float-3 { --rot: rotate(-2deg); }
+
+@media (max-width: 600px) {
+  .float-1, .float-3 { left: -2%; }
+  .float-2 { right: -2%; }
+  .mockup-stage { max-width: 360px; }
+}
+
+/* ============ LOGOS BAR ============ */
+.logos {
+  margin-top: 64px; padding: 28px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.logos-inner { display: flex; align-items: center; flex-wrap: wrap; gap: 28px 40px; justify-content: space-between; }
+.logos-label { font-size: 12.5px; color: var(--ink-2); letter-spacing: .04em; text-transform: uppercase; }
+.logos-row { display: flex; flex-wrap: wrap; gap: 18px 36px; align-items: center; opacity: .8; }
+.logo-pill {
+  font-family: "Space Grotesk"; font-weight: 600;
+  font-size: 16px; color: var(--ink-2);
+  letter-spacing: -0.01em;
+  display: flex; align-items: center; gap: 8px;
+}
+.logo-pill .sq {
+  width: 18px; height: 18px; border-radius: 5px;
+  background: var(--ink); opacity: .85;
+}
+.logo-pill:nth-child(1) .sq { background: linear-gradient(135deg, #FF6A00, #FFB800); }
+.logo-pill:nth-child(2) .sq { background: linear-gradient(135deg, #00A3FF, #00CFFF); }
+.logo-pill:nth-child(3) .sq { background: linear-gradient(135deg, #E10A1B, #FF4757); }
+.logo-pill:nth-child(4) .sq { background: linear-gradient(135deg, #1F1F1F, #4a4a4a); }
+.logo-pill:nth-child(5) .sq { background: linear-gradient(135deg, #B56CFF, #8A05BE); }
+.logo-pill:nth-child(6) .sq { background: linear-gradient(135deg, #00B894, #1ABC9C); }
+
+/* ============ SECTION ============ */
+section { padding: 96px 0; position: relative; }
+.section-head { max-width: 720px; margin: 0 auto 56px; text-align: center; }
+.section-head .eyebrow { margin-bottom: 18px; }
+.section-head h2 { margin-bottom: 14px; }
+.section-head p { font-size: 17px; line-height: 1.55; }
+.eyebrow-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--primary-50);
+  color: var(--primary);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12.5px; font-weight: 500;
+  letter-spacing: .02em;
+}
+.eyebrow-tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
+
+/* ============ DOR / SOLUÇÃO ============ */
+.problem { background: #fff; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.problem-grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
+@media (min-width: 880px) { .problem-grid { grid-template-columns: repeat(3, 1fr); gap: 28px; } }
+.problem-card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 28px;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.problem-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: transparent; }
+.problem-pain {
+  font-family: "Space Grotesk"; font-weight: 500;
+  font-size: 14px; color: var(--primary);
+  letter-spacing: -0.005em;
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 14px;
+}
+.problem-pain::before { content: ""; width: 16px; height: 1px; background: var(--primary); }
+.problem-card h3 { font-size: 22px; margin-bottom: 10px; line-height: 1.2; }
+.problem-card p { font-size: 15px; line-height: 1.55; }
+.problem-card .answer {
+  margin-top: 18px; padding-top: 18px;
+  border-top: 1px dashed var(--line);
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 14px; color: var(--ink);
+}
+.problem-card .answer .check {
+  flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--grad); color: #fff;
+  display: grid; place-items: center; font-size: 12px;
+  margin-top: 1px;
+}
+
+/* ============ BENEFÍCIOS ============ */
+.benefits { background: var(--bg); }
+.bento {
+  display: grid; gap: 18px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px) { .bento { grid-template-columns: repeat(6, 1fr); } }
+.bento-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 28px;
+  position: relative; overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+  display: flex; flex-direction: column;
+}
+.bento-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.bento-card h3 { font-size: 22px; margin-bottom: 10px; letter-spacing: -0.02em; }
+.bento-card p { font-size: 14.5px; line-height: 1.55; }
+.bento-card .visual { margin-top: 24px; flex: 1; min-height: 160px; display: flex; align-items: flex-end; }
+.bento-card.dark { background: linear-gradient(155deg, #150024 0%, #2c0246 60%, #4a087a 100%); color: #fff; border: 0; }
+.bento-card.dark h3, .bento-card.dark p { color: #fff; }
+.bento-card.dark p { color: rgba(255,255,255,.78); }
+@media (min-width: 760px) {
+  .bento-1 { grid-column: span 4; }
+  .bento-2 { grid-column: span 2; }
+  .bento-3 { grid-column: span 2; }
+  .bento-4 { grid-column: span 2; }
+  .bento-5 { grid-column: span 2; }
+}
+
+/* ----- bento 1: wallet stack visual ----- */
+.wallet-stack { position: relative; width: 100%; height: 220px; perspective: 1200px; margin-top: 12px; }
+.wcard {
+  position: absolute; left: 0; right: 0; margin: 0 auto;
+  width: 84%; max-width: 380px;
+  height: 130px;
+  border-radius: 18px;
+  padding: 16px 18px;
+  color: #fff;
+  display: flex; flex-direction: column; justify-content: space-between;
+  box-shadow: 0 18px 40px rgba(0,0,0,.18);
+  transition: transform .4s cubic-bezier(.2,.8,.2,1);
+}
+.wcard .row { display: flex; justify-content: space-between; align-items: center; }
+.wcard .nm { font-family: "Space Grotesk"; font-weight: 600; font-size: 14px; letter-spacing: -0.01em; opacity: .92; }
+.wcard .pts { font-family: "Space Grotesk"; font-weight: 600; font-size: 26px; letter-spacing: -0.02em; }
+.wcard .dt { font-size: 11px; opacity: .85; }
+.wcard .chip { width: 26px; height: 18px; border-radius: 4px; background: rgba(255,255,255,.3); }
+.w1 { top: 0; transform: translateY(0) rotate(-4deg); background: linear-gradient(135deg, #8A05BE 0%, #B56CFF 100%); z-index: 3; }
+.w2 { top: 28px; transform: translateY(0) rotate(2deg); background: linear-gradient(135deg, #1F1F1F 0%, #3a3a3a 100%); z-index: 2; }
+.w3 { top: 56px; transform: translateY(0) rotate(7deg); background: linear-gradient(135deg, #6A00A3 0%, #9E2FD4 100%); z-index: 1; }
+.bento-1:hover .w1 { transform: translateY(-8px) rotate(-7deg); }
+.bento-1:hover .w2 { transform: translateY(-4px) rotate(0deg); }
+.bento-1:hover .w3 { transform: translateY(0) rotate(10deg); }
+
+/* ----- bento 2: radar ----- */
+.radar {
+  position: relative;
+  width: 100%; aspect-ratio: 1; max-width: 220px;
+  margin: 12px auto 0;
+}
+.radar-ring {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.1);
+}
+.radar-ring.r2 { inset: 14%; }
+.radar-ring.r3 { inset: 28%; }
+.radar-ring.r4 { inset: 42%; }
+.radar-sweep {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(181, 108, 255, 0.5) 60deg, transparent 90deg);
+  animation: sweep 4s linear infinite;
+  mix-blend-mode: screen;
+}
+@keyframes sweep { to { transform: rotate(360deg); } }
+.radar-dot {
+  position: absolute;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #B56CFF;
+  box-shadow: 0 0 0 4px rgba(181, 108, 255, .25), 0 0 14px rgba(181, 108, 255, .8);
+}
+.radar-dot.d1 { left: 28%; top: 32%; }
+.radar-dot.d2 { left: 70%; top: 50%; background: #fff; box-shadow: 0 0 0 4px rgba(255,255,255,.3), 0 0 12px rgba(255,255,255,.6); }
+.radar-dot.d3 { left: 45%; top: 72%; }
+.radar-center {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #fff;
+}
+
+/* ----- bento 3: calendar ----- */
+.cal {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 4px; margin-top: 8px;
+}
+.cal .h { font-size: 10px; color: var(--ink-2); text-align: center; padding: 4px 0; font-weight: 500; }
+.cal .d {
+  aspect-ratio: 1; border-radius: 6px;
+  display: grid; place-items: center;
+  font-size: 10px; font-weight: 500;
+  color: var(--ink);
+}
+.cal .d.muted { color: #d8d8de; }
+.cal .d.p1 { background: #FBF4FF; }
+.cal .d.p2 { background: #F2E2FF; color: var(--primary); }
+.cal .d.p3 { background: #E0BBFF; color: var(--primary-dark); }
+.cal .d.p4 { background: var(--grad); color: #fff; font-weight: 600; box-shadow: 0 4px 10px rgba(138,5,190,.3); }
+
+/* ----- bento 4: simulator ----- */
+.sim { margin-top: 8px; display: flex; flex-direction: column; gap: 10px; }
+.sim .row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; font-size: 13px; }
+.sim .row.hl { background: var(--primary-50); border-color: #ead4ff; color: var(--primary-dark); font-weight: 500; }
+.sim .row .l { flex: 1; }
+.sim .row .v { font-family: "Space Grotesk"; font-weight: 600; }
+
+/* ----- bento 5: alerts ----- */
+.alerts { margin-top: 8px; display: flex; flex-direction: column; gap: 8px; }
+.alert {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 13px;
+  background: #fff;
+}
+.alert .ic {
+  flex: 0 0 24px; width: 24px; height: 24px; border-radius: 7px;
+  display: grid; place-items: center;
+  background: var(--grad-soft); color: var(--primary);
+  font-size: 11px; font-weight: 700;
+}
+.alert .nm { font-weight: 500; color: var(--ink); }
+.alert .desc { font-size: 11.5px; color: var(--ink-2); margin-top: 1px; }
+
+/* ============ COMO FUNCIONA ============ */
+.how { background: #fff; border-top: 1px solid var(--line); }
+.steps { display: grid; gap: 24px; grid-template-columns: 1fr; counter-reset: step; }
+@media (min-width: 880px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 32px; } }
+.step {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 32px 28px;
+  position: relative;
+  counter-increment: step;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.step:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.step::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute; top: 24px; right: 28px;
+  font-family: "Space Grotesk"; font-weight: 600; font-size: 56px;
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: .25;
+  line-height: 1;
+}
+.step h3 { font-size: 22px; margin-bottom: 10px; max-width: 80%; }
+.step p { font-size: 14.5px; line-height: 1.55; max-width: 90%; }
+.step-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: var(--grad);
+  display: grid; place-items: center;
+  color: #fff;
+  margin-bottom: 22px;
+  box-shadow: 0 8px 18px rgba(138, 5, 190, .25);
+}
+
+/* ============ PARA QUEM É ============ */
+.audience { background: var(--bg); }
+.audience-grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
+@media (min-width: 880px) { .audience-grid { grid-template-columns: 1fr 1fr; gap: 28px; } }
+.aud-card {
+  background: #fff;
+  border-radius: var(--r-xl);
+  padding: 36px;
+  border: 1px solid var(--line);
+  position: relative; overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.aud-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.aud-card.featured {
+  background: linear-gradient(155deg, #1a0027 0%, #2e0244 60%, #500a82 100%);
+  color: #fff; border: 0;
+}
+.aud-card.featured h3, .aud-card.featured p, .aud-card.featured li { color: #fff; }
+.aud-card.featured p, .aud-card.featured li { color: rgba(255,255,255,.78); }
+.aud-card.featured::before {
+  content: ""; position: absolute;
+  inset: -40% -40% auto auto;
+  width: 380px; height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(181, 108, 255, .25), transparent 65%);
+}
+.aud-tag {
+  display: inline-block; padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--primary-50);
+  color: var(--primary);
+  font-size: 12px; font-weight: 500;
+  margin-bottom: 18px;
+}
+.featured .aud-tag { background: rgba(255,255,255,.12); color: #fff; }
+.aud-card h3 { font-size: 26px; margin-bottom: 14px; line-height: 1.2; }
+.aud-card > p { font-size: 15.5px; line-height: 1.55; max-width: 96%; }
+.aud-list { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-direction: column; gap: 10px; }
+.aud-list li { font-size: 14.5px; display: flex; gap: 10px; align-items: flex-start; }
+.aud-list li::before {
+  content: ""; flex: 0 0 18px; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--grad);
+  margin-top: 2px;
+  background-image: var(--grad), url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 6 L5 8 L9 4' stroke='white' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-blend-mode: normal;
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.featured .aud-list li::before { background: rgba(255,255,255,.18); }
+
+/* ============ CONFIANÇA ============ */
+.trust { background: #fff; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.trust-inner { display: grid; gap: 48px; grid-template-columns: 1fr; align-items: center; }
+@media (min-width: 880px) { .trust-inner { grid-template-columns: 1.1fr 1fr; gap: 64px; } }
+.trust-points { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 18px; }
+.trust-points li { display: flex; gap: 16px; align-items: flex-start; font-size: 15px; line-height: 1.5; }
+.trust-points li .ic {
+  flex: 0 0 36px; width: 36px; height: 36px; border-radius: 10px;
+  background: var(--grad-soft); color: var(--primary);
+  display: grid; place-items: center;
+}
+.trust-points li b { font-family: "Space Grotesk"; font-weight: 600; color: var(--ink); display: block; margin-bottom: 2px; font-size: 16px; letter-spacing: -0.01em;}
+.trust-visual {
+  background: linear-gradient(155deg, #1a0027 0%, #2e0244 60%, #500a82 100%);
+  border-radius: var(--r-xl);
+  padding: 40px;
+  color: #fff;
+  position: relative; overflow: hidden;
+  min-height: 360px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.trust-visual::before {
+  content: ""; position: absolute; inset: -50% -40% auto auto;
+  width: 420px; height: 420px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(181, 108, 255, .3), transparent 65%);
+}
+.lock-vis { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 20px; }
+.lock-vis .lock {
+  width: 56px; height: 56px; border-radius: 16px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  display: grid; place-items: center;
+  color: #fff;
+  backdrop-filter: blur(10px);
+}
+.lock-vis h3 { font-size: 24px; color: #fff; line-height: 1.2; }
+.lock-vis p { color: rgba(255,255,255,.78); font-size: 14.5px; line-height: 1.55; max-width: 360px; }
+.trust-pill {
+  position: relative; z-index: 1;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  font-size: 13px;
+  align-self: flex-start;
+}
+.trust-pill .pulse { width: 8px; height: 8px; border-radius: 50%; background: #B56CFF; box-shadow: 0 0 0 0 rgba(181,108,255,.6); animation: pulse 2s ease-out infinite; }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(181,108,255,.6); }
+  70% { box-shadow: 0 0 0 12px rgba(181,108,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(181,108,255,0); }
+}
+
+/* ============ PLANS / WAITLIST ============ */
+.plans { background: var(--bg); }
+.plan-wrap { display: grid; gap: 24px; grid-template-columns: 1fr; }
+@media (min-width: 880px) { .plan-wrap { grid-template-columns: 1fr 1fr; gap: 32px; } }
+.plan {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 40px 36px;
+  position: relative;
+  transition: transform .25s ease, box-shadow .25s ease;
+  display: flex; flex-direction: column;
+}
+.plan:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.plan.featured {
+  background: linear-gradient(155deg, #210031 0%, #3a0259 50%, #6A00A3 100%);
+  color: #fff; border: 0;
+  box-shadow: var(--shadow-lg);
+}
+.plan.featured h3, .plan.featured .price { color: #fff; }
+.plan.featured p, .plan.featured li { color: rgba(255,255,255,.85); }
+.plan.featured::before {
+  content: ""; position: absolute;
+  inset: -30% -30% auto auto;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(181, 108, 255, .3), transparent 65%);
+}
+.plan-tag {
+  position: absolute; top: 24px; right: 24px;
+  padding: 5px 12px; border-radius: 999px;
+  background: rgba(255,255,255,.14);
+  color: #fff; font-size: 11.5px; font-weight: 500;
+  letter-spacing: .03em;
+  border: 1px solid rgba(255,255,255,.18);
+}
+.plan h3 { font-size: 22px; margin-bottom: 8px; }
+.plan > p { font-size: 14.5px; max-width: 95%; }
+.price { font-family: "Space Grotesk"; font-weight: 600; font-size: 48px; letter-spacing: -0.03em; margin: 28px 0 4px; line-height: 1; position: relative; z-index: 1;}
+.price small { font-size: 14px; font-weight: 400; color: var(--ink-2); margin-left: 6px; letter-spacing: 0; }
+.featured .price small { color: rgba(255,255,255,.7); }
+.plan-list { list-style: none; padding: 0; margin: 24px 0 32px; display: flex; flex-direction: column; gap: 10px; flex: 1; position: relative; z-index: 1; }
+.plan-list li { font-size: 14.5px; display: flex; gap: 10px; align-items: flex-start; }
+.plan-list li::before {
+  content: "✓"; flex: 0 0 20px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--primary-50); color: var(--primary);
+  display: grid; place-items: center;
+  font-size: 11px; font-weight: 700;
+  margin-top: 1px;
+}
+.featured .plan-list li::before { background: rgba(255,255,255,.18); color: #fff; }
+.plan .btn { align-self: stretch; justify-content: center; position: relative; z-index: 1; }
+
+/* ============ FAQ ============ */
+.faq { background: #fff; border-top: 1px solid var(--line); }
+.faq-wrap { max-width: 820px; margin: 0 auto; }
+.faq-item {
+  border-bottom: 1px solid var(--line);
+}
+.faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 24px 0;
+  font-family: "Space Grotesk";
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  display: flex; justify-content: space-between; align-items: center; gap: 24px;
+  color: var(--ink);
+  transition: color .15s ease;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:hover { color: var(--primary); }
+.faq-item .icon {
+  flex: 0 0 28px; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  display: grid; place-items: center;
+  color: var(--ink);
+  transition: transform .25s ease, background .2s ease, color .2s ease;
+}
+.faq-item[open] .icon { background: var(--grad); color: #fff; transform: rotate(180deg); border-color: transparent; }
+.faq-item .ans { padding: 0 0 24px; max-width: 92%; font-size: 15px; line-height: 1.6; }
+
+/* ============ FINAL CTA ============ */
+.final {
+  position: relative; overflow: hidden;
+  background: linear-gradient(155deg, #1a0027 0%, #2e0244 50%, #6A00A3 100%);
+  color: #fff;
+  padding: 100px 0;
+  text-align: center;
+}
+.final::before {
+  content: ""; position: absolute;
+  inset: -50% -10% auto -10%;
+  height: 600px;
+  background:
+    radial-gradient(ellipse 50% 60% at 30% 50%, rgba(181, 108, 255, 0.35), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(138, 5, 190, 0.3), transparent 60%);
+  pointer-events: none;
+}
+.final::after {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 60% 60% at center, black 20%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 60% at center, black 20%, transparent 70%);
+}
+.final .inner { position: relative; z-index: 1; max-width: 780px; margin: 0 auto; padding: 0 24px;}
+.final h2 { color: #fff; }
+.final p { color: rgba(255,255,255,.8); font-size: 18px; margin: 18px 0 36px; }
+.final .btn-primary {
+  background: #fff; color: var(--primary-dark);
+  box-shadow: 0 18px 40px rgba(0,0,0,.25);
+}
+.final .btn-primary:hover { background: #fff; color: var(--primary); }
+.final .btn-ghost {
+  background: transparent; color: #fff;
+  border: 1px solid rgba(255,255,255,.25);
+}
+.final .btn-ghost:hover { border-color: rgba(255,255,255,.5); background: rgba(255,255,255,.06); }
+.final .ctas { display: inline-flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+/* ============ FOOTER ============ */
+footer { background: #0c0010; color: rgba(255,255,255,.7); padding: 64px 0 28px; }
+.foot-grid { display: grid; gap: 40px; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .foot-grid { grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; } }
+footer .brand { color: #fff; }
+footer .brand-mark { box-shadow: 0 6px 14px rgba(138, 5, 190, 0.45); }
+footer p { color: rgba(255,255,255,.6); font-size: 14px; max-width: 320px; margin-top: 16px; line-height: 1.55; }
+.foot-col h4 { font-family: "Space Grotesk"; font-weight: 500; font-size: 13px; color: #fff; margin-bottom: 16px; letter-spacing: .04em; text-transform: uppercase; }
+.foot-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.foot-col a { font-size: 14px; color: rgba(255,255,255,.7); transition: color .15s ease; }
+.foot-col a:hover { color: #fff; }
+.foot-bottom {
+  margin-top: 56px; padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  font-size: 13px; color: rgba(255,255,255,.5);
+}
+
+/* ============ UTILS ============ */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#" class="brand" aria-label="Gest Miles">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 17 L9 11 L13 14 L21 6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="6" r="1.6" fill="white"/></svg>
+      </span>
+      Gest Miles
+    </a>
+    <nav class="nav-links" aria-label="Primária">
+      <a href="#beneficios">Benefícios</a>
+      <a href="#como">Como funciona</a>
+      <a href="#planos">Planos</a>
+      <a href="#faq">Perguntas</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#login" class="btn btn-link">Entrar</a>
+      <a href="#cadastro" class="btn btn-primary">Começar grátis</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">
+        <span class="dot">★</span>
+        Gestão inteligente de milhas e pontos
+      </span>
+      <h1>Suas milhas, sob <span class="grad-text">controle total</span> — em um só lugar.</h1>
+      <p class="hero-sub">
+        Reúna todos os seus programas de fidelidade, acompanhe vencimentos antes que seja tarde
+        e descubra a melhor data para emitir suas passagens. Simples, transparente e feito para quem leva milhas a sério.
+      </p>
+      <div class="hero-cta">
+        <a href="#cadastro" class="btn btn-primary btn-lg">
+          Começar grátis
+          <span class="arrow">→</span>
+        </a>
+        <a href="#como" class="btn btn-ghost btn-lg">
+          <span aria-hidden="true">▶</span>
+          Ver como funciona
+        </a>
+      </div>
+      <div class="hero-trust">
+        <div class="stack" aria-hidden="true">
+          <span>JM</span><span>RS</span><span>AC</span><span>+</span>
+        </div>
+        <div>Mais de <strong style="color:var(--ink)">12.000 viajantes</strong> organizando milhas com a Gest Miles.</div>
+      </div>
+    </div>
+
+    <!-- Mockup -->
+    <div class="hero-mockup">
+      <div class="mockup-stage">
+
+        <!-- Floating cards -->
+        <div class="float-card float-1">
+          <div class="ic-c">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2 L13.5 9 L21 9.5 L15 14 L17 21 L12 17 L7 21 L9 14 L3 9.5 L10.5 9 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="label">Bônus ativo</div>
+            <div class="val">+120% Smiles</div>
+          </div>
+        </div>
+
+        <div class="float-card float-2">
+          <div class="ic-c">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7 V12 L15 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="label">Vence em 23 dias</div>
+            <div class="val">8.420 pts Livelo</div>
+          </div>
+        </div>
+
+        <div class="float-card float-3">
+          <div class="ic-c">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 12 L8 7 L13 12 L21 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M16 4 H21 V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          </div>
+          <div>
+            <div class="label">Melhor data</div>
+            <div class="val">GRU → LIS · -38%</div>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="phone">
+          <span class="btn-act" aria-hidden="true"></span>
+          <span class="btn-vol" aria-hidden="true"></span>
+          <span class="btn-pow" aria-hidden="true"></span>
+          <div class="phone-screen">
+            <div class="gloss" aria-hidden="true"></div>
+            <div class="phone-status">
+              <span>9:41</span>
+              <div class="icons" aria-hidden="true"><span></span><span></span><span></span></div>
+            </div>
+            <div class="phone-header">
+              <div>
+                <div class="greet">Olá,</div>
+                <div class="name">Júlia</div>
+              </div>
+              <div class="avatar">JM</div>
+            </div>
+
+            <div class="phone-balance">
+              <div class="label">Saldo total estimado</div>
+              <div class="value">R$ 14.380,00</div>
+              <div class="delta">+ R$ 920 este mês</div>
+            </div>
+
+            <div class="phone-section-title">
+              <span>Seus programas</span>
+              <a class="more" href="#">Ver todos</a>
+            </div>
+
+            <div class="phone-progs">
+              <div class="prog">
+                <div class="logo" style="background: linear-gradient(135deg,#FF6A00,#FFB800)">SM</div>
+                <div>
+                  <div class="name">Smiles</div>
+                  <div class="meta">Vence parte em 41 dias</div>
+                </div>
+                <div class="pts">82.450<small>milhas</small></div>
+              </div>
+              <div class="prog">
+                <div class="logo" style="background: linear-gradient(135deg,#00A3FF,#00CFFF)">TA</div>
+                <div>
+                  <div class="name">TudoAzul</div>
+                  <div class="meta">Próximo bônus em 6 dias</div>
+                </div>
+                <div class="pts">31.220<small>pontos</small></div>
+              </div>
+              <div class="prog">
+                <div class="logo" style="background: linear-gradient(135deg,#E10A1B,#FF4757)">LP</div>
+                <div>
+                  <div class="name">LATAM Pass</div>
+                  <div class="meta">Sem vencimentos próximos</div>
+                </div>
+                <div class="pts">47.890<small>milhas</small></div>
+              </div>
+              <div class="prog">
+                <div class="logo" style="background: linear-gradient(135deg,#B56CFF,#8A05BE)">LV</div>
+                <div>
+                  <div class="name">Livelo</div>
+                  <div class="meta">Vence em 23 dias</div>
+                </div>
+                <div class="pts">8.420<small>pontos</small></div>
+              </div>
+            </div>
+
+            <div class="phone-foot">
+              <div class="tab active"><div class="ic"></div>Início</div>
+              <div class="tab"><div class="ic"></div>Buscar</div>
+              <div class="tab"><div class="ic"></div>Radar</div>
+              <div class="tab"><div class="ic"></div>Perfil</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logos -->
+  <div class="container">
+    <div class="logos">
+      <div class="logos-inner">
+        <div class="logos-label">Programas suportados</div>
+        <div class="logos-row">
+          <div class="logo-pill"><span class="sq"></span>Smiles</div>
+          <div class="logo-pill"><span class="sq"></span>TudoAzul</div>
+          <div class="logo-pill"><span class="sq"></span>LATAM Pass</div>
+          <div class="logo-pill"><span class="sq"></span>Esfera</div>
+          <div class="logo-pill"><span class="sq"></span>Livelo</div>
+          <div class="logo-pill"><span class="sq"></span>Iupp</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DOR / SOLUÇÃO ===== -->
+<section class="problem" id="dor-solucao">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow-tag">O problema de quem acumula milhas</span>
+      <h2>Você acumula. Mas será que está realmente ganhando?</h2>
+      <p>Três frustrações comuns — e como a Gest Miles resolve cada uma.</p>
+    </div>
+
+    <div class="problem-grid">
+      <article class="problem-card">
+        <div class="problem-pain">DOR Nº 01</div>
+        <h3>Pontos espalhados em programas que você nem lembra mais</h3>
+        <p>Cartões, programas de hotel, parceiros, cashback. Sem visão única, é fácil deixar saldo parado em qualquer canto.</p>
+        <div class="answer">
+          <span class="check">✓</span>
+          <span><strong style="color:var(--ink)">Carteira unificada:</strong> todos os seus programas em um painel só, com saldo total convertido em reais.</span>
+        </div>
+      </article>
+
+      <article class="problem-card">
+        <div class="problem-pain">DOR Nº 02</div>
+        <h3>O medo silencioso de descobrir que milhas venceram</h3>
+        <p>Datas de expiração diferentes em cada programa. Uma única distração e milhares de pontos viram pó.</p>
+        <div class="answer">
+          <span class="check">✓</span>
+          <span><strong style="color:var(--ink)">Alertas de vencimento:</strong> avisos com tempo de sobra para você usar, transferir ou estender saldos.</span>
+        </div>
+      </article>
+
+      <article class="problem-card">
+        <div class="problem-pain">DOR Nº 03</div>
+        <h3>"Será que vale a pena resgatar essa passagem?"</h3>
+        <p>Comparar o valor em milhas com o preço em reais é trabalho de planilha. Só que ninguém tem tempo pra isso.</p>
+        <div class="answer">
+          <span class="check">✓</span>
+          <span><strong style="color:var(--ink)">Calculadora de resgate:</strong> mostramos o valor real do ponto e se o trecho vale mais em dinheiro ou milha.</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BENEFÍCIOS ===== -->
+<section class="benefits" id="beneficios">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow-tag">Funcionalidades</span>
+      <h2>Tudo o que você precisa para tirar o máximo das suas milhas.</h2>
+      <p>Da carteira ao radar de oportunidades — sem planilhas, sem dor de cabeça.</p>
+    </div>
+
+    <div class="bento">
+      <!-- Card 1 — Wallet -->
+      <article class="bento-card bento-1">
+        <h3>Visão única dos seus programas</h3>
+        <p>Conecte Smiles, TudoAzul, LATAM Pass, Livelo, Esfera e mais. Saldos, pontos e milhas em uma única carteira, sempre atualizada.</p>
+        <div class="visual">
+          <div class="wallet-stack">
+            <div class="wcard w1">
+              <div class="row"><span class="nm">Smiles</span><span class="chip"></span></div>
+              <div class="row"><span class="dt">Atualizado hoje</span><span class="pts">82.450</span></div>
+            </div>
+            <div class="wcard w2">
+              <div class="row"><span class="nm">LATAM Pass</span><span class="chip"></span></div>
+              <div class="row"><span class="dt">Atualizado hoje</span><span class="pts">47.890</span></div>
+            </div>
+            <div class="wcard w3">
+              <div class="row"><span class="nm">Livelo</span><span class="chip"></span></div>
+              <div class="row"><span class="dt">Vence em 23 dias</span><span class="pts">8.420</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 — Radar -->
+      <article class="bento-card bento-2 dark">
+        <h3>Radar de oportunidades</h3>
+        <p>Bônus de transferência, promoções relâmpago e ofertas estratégicas — direto na sua tela, no momento certo.</p>
+        <div class="visual" style="justify-content: center;">
+          <div class="radar">
+            <div class="radar-ring"></div>
+            <div class="radar-ring r2"></div>
+            <div class="radar-ring r3"></div>
+            <div class="radar-ring r4"></div>
+            <div class="radar-sweep"></div>
+            <div class="radar-dot d1"></div>
+            <div class="radar-dot d2"></div>
+            <div class="radar-dot d3"></div>
+            <div class="radar-center"></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 — Calendar -->
+      <article class="bento-card bento-3">
+        <h3>Calendário de preços</h3>
+        <p>Veja o mês inteiro de uma vez. Ache o dia mais barato para voar e simule rotas com milhas.</p>
+        <div class="visual" style="display:block;">
+          <div class="cal" aria-hidden="true">
+            <div class="h">D</div><div class="h">S</div><div class="h">T</div><div class="h">Q</div><div class="h">Q</div><div class="h">S</div><div class="h">S</div>
+            <div class="d muted">28</div><div class="d muted">29</div><div class="d muted">30</div><div class="d p1">1</div><div class="d p1">2</div><div class="d p2">3</div><div class="d p2">4</div>
+            <div class="d p1">5</div><div class="d p2">6</div><div class="d p3">7</div><div class="d p3">8</div><div class="d p4">9</div><div class="d p3">10</div><div class="d p2">11</div>
+            <div class="d p1">12</div><div class="d p2">13</div><div class="d p3">14</div><div class="d p4">15</div><div class="d p3">16</div><div class="d p2">17</div><div class="d p1">18</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4 — Simulator -->
+      <article class="bento-card bento-4">
+        <h3>Simule comprar milhas</h3>
+        <p>Calcule rapidinho se vale a pena comprar milhas para uma emissão. A Gest Miles compara o custo total em reais.</p>
+        <div class="visual" style="display:block;">
+          <div class="sim">
+            <div class="row"><span class="l">Passagem em dinheiro</span><span class="v">R$ 4.890</span></div>
+            <div class="row"><span class="l">Comprar milhas + emitir</span><span class="v">R$ 2.910</span></div>
+            <div class="row hl"><span class="l">Você economiza</span><span class="v">R$ 1.980</span></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 5 — Alerts -->
+      <article class="bento-card bento-5">
+        <h3>Alertas inteligentes</h3>
+        <p>Nada de planilha. Vencimentos, bônus e ofertas chegam pra você antes que seja tarde.</p>
+        <div class="visual" style="display:block;">
+          <div class="alerts">
+            <div class="alert">
+              <div class="ic">!</div>
+              <div>
+                <div class="nm">Livelo vence em 23 dias</div>
+                <div class="desc">8.420 pontos. Considere transferir para Smiles.</div>
+              </div>
+            </div>
+            <div class="alert">
+              <div class="ic">★</div>
+              <div>
+                <div class="nm">Bônus de 120% para Smiles</div>
+                <div class="desc">Promoção termina sexta-feira.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMO FUNCIONA ===== -->
+<section class="how" id="como">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow-tag">Como funciona</span>
+      <h2>Em três passos, milhas que viram viagem.</h2>
+      <p>Sem planilha, sem complicação — comece em menos de dois minutos.</p>
+    </div>
+
+    <div class="steps">
+      <article class="step">
+        <div class="step-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M16 11 V7 a4 4 0 0 0 -8 0 V11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <h3>Crie sua conta e conecte seus programas</h3>
+        <p>Cadastro em segundos. Adicione os programas que você usa — Smiles, TudoAzul, LATAM Pass, Livelo, Esfera e mais.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 18 L8 13 L12 16 L21 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="7" r="1.5" fill="currentColor"/></svg>
+        </div>
+        <h3>Receba seu painel personalizado</h3>
+        <p>Veja saldos, valor em reais, vencimentos e oportunidades — tudo organizado e pronto pra agir.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 17 L9 12 L13 13 L21 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 5 H21 V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Planeje, simule e emita com inteligência</h3>
+        <p>Compare datas, calcule resgates, aproveite bônus. Quando der o melhor momento, você vai saber primeiro.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PARA QUEM É ===== -->
+<section class="audience" id="para-quem">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow-tag">Para quem é</span>
+      <h2>Feito para quem acumula. Pensado para quem planeja.</h2>
+    </div>
+
+    <div class="audience-grid">
+      <article class="aud-card">
+        <span class="aud-tag">Viajante frequente</span>
+        <h3>Você voa, acumula e quer aproveitar de verdade</h3>
+        <p>Se já passou raiva com milhas vencidas ou ficou na dúvida se valia mais em dinheiro, esse painel foi feito pra você.</p>
+        <ul class="aud-list">
+          <li>Carteira completa em um app</li>
+          <li>Alertas de vencimento sem fricção</li>
+          <li>Calendário e radar de melhores momentos</li>
+          <li>Calculadora de resgate clara e direta</li>
+        </ul>
+      </article>
+
+      <article class="aud-card featured">
+        <span class="aud-tag">Consultores e empresas</span>
+        <h3>Gestão estratégica de carteiras de milhas</h3>
+        <p>Para quem cuida da estratégia de pontos de múltiplos clientes ou colaboradores e precisa de organização e relatórios sérios.</p>
+        <ul class="aud-list">
+          <li>Múltiplas carteiras em uma só visão</li>
+          <li>Histórico, exportação e relatórios</li>
+          <li>Notificações segmentadas por cliente</li>
+          <li>Suporte dedicado e onboarding guiado</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONFIANÇA ===== -->
+<section class="trust" id="seguranca">
+  <div class="container">
+    <div class="trust-inner">
+      <div>
+        <span class="eyebrow-tag" style="margin-bottom:18px; display:inline-flex">Segurança e privacidade</span>
+        <h2 style="margin-top:14px;">Seus dados, blindados. Suas milhas, sob controle.</h2>
+        <ul class="trust-points">
+          <li>
+            <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3 L20 6 V12 a8 8 0 0 1 -8 8 a8 8 0 0 1 -8 -8 V6 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12 L11 14 L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div><b>Criptografia em todas as camadas</b>Suas informações trafegam e ficam armazenadas com padrão de criptografia atual de mercado.</div>
+          </li>
+          <li>
+            <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7 V13 L16 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <div><b>Você no controle dos seus saldos</b>A Gest Miles não emite passagens automaticamente. Quem decide é sempre você.</div>
+          </li>
+          <li>
+            <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 7 H21 V19 a2 2 0 0 1 -2 2 H5 a2 2 0 0 1 -2 -2 Z" stroke="currentColor" stroke-width="2"/><path d="M8 7 V5 a2 2 0 0 1 2 -2 H14 a2 2 0 0 1 2 2 V7" stroke="currentColor" stroke-width="2"/></svg></span>
+            <div><b>LGPD por padrão</b>Você decide quais dados compartilhar e pode apagar tudo da sua conta a qualquer momento.</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="trust-visual">
+        <div class="trust-pill"><span class="pulse"></span>Conexão segura ativa</div>
+        <div class="lock-vis">
+          <div class="lock">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="4" y="11" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 11 V7 a4 4 0 0 1 8 0 V11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Você no comando. A gente cuida da parte difícil.</h3>
+          <p>Sem promessas mirabolantes, sem vendas casadas. A missão da Gest Miles é simples: dar clareza pra que você decida o que fazer com suas milhas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PLANOS ===== -->
+<section class="plans" id="planos">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow-tag">Planos</span>
+      <h2>Comece grátis. Suba para o Pro quando quiser ir além.</h2>
+      <p>Sem compromisso, sem cartão pra começar — você decide quando vale a pena evoluir.</p>
+    </div>
+
+    <div class="plan-wrap">
+      <article class="plan">
+        <h3>Gratuito</h3>
+        <p>Para quem está organizando as primeiras milhas e quer parar de perder vencimentos.</p>
+        <div class="price">R$ 0<small>/ para sempre</small></div>
+        <ul class="plan-list">
+          <li>Até 3 programas conectados</li>
+          <li>Alertas de vencimento básicos</li>
+          <li>Carteira unificada e saldo total</li>
+          <li>Calculadora de resgate</li>
+        </ul>
+        <a href="#cadastro" class="btn btn-ghost btn-lg">Criar conta grátis</a>
+      </article>
+
+      <article class="plan featured">
+        <span class="plan-tag">Mais escolhido</span>
+        <h3>Pro</h3>
+        <p>Para quem quer extrair o máximo das milhas com radar, simulações e alertas avançados.</p>
+        <div class="price">R$ 19,90<small>/ mês</small></div>
+        <ul class="plan-list">
+          <li>Programas ilimitados</li>
+          <li>Radar de oportunidades em tempo real</li>
+          <li>Calendário de preços e simulador completo</li>
+          <li>Alertas inteligentes personalizáveis</li>
+          <li>Histórico e exportação de dados</li>
+        </ul>
+        <a href="#cadastro" class="btn btn-primary btn-lg" style="background:#fff;color:var(--primary-dark);">
+          Começar 14 dias grátis
+          <span class="arrow">→</span>
+        </a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow-tag">Perguntas frequentes</span>
+      <h2>Antes que você pergunte.</h2>
+    </div>
+
+    <div class="faq-wrap">
+      <details class="faq-item" open>
+        <summary>A Gest Miles tem acesso aos meus saldos para emitir passagens sem eu autorizar?<span class="icon">▾</span></summary>
+        <div class="ans">Não. A Gest Miles é uma ferramenta de gestão e visualização. Toda emissão, transferência ou compra continua sendo feita por você dentro do programa de fidelidade — a gente só te ajuda a decidir o melhor momento.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Quais programas vocês suportam hoje?<span class="icon">▾</span></summary>
+        <div class="ans">Os principais programas brasileiros: Smiles, TudoAzul, LATAM Pass, Livelo, Esfera e Iupp. Estamos ampliando a lista — se o seu programa favorito não está aqui, peça pelo contato e a gente prioriza.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Como funciona o alerta de vencimento?<span class="icon">▾</span></summary>
+        <div class="ans">Você define com quanto tempo de antecedência quer ser avisado (por exemplo, 60, 30 ou 7 dias). A gente envia notificação no app e e-mail, sempre com a sugestão do que fazer com aquele saldo: usar, transferir ou estender.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Posso usar o plano gratuito por tempo indeterminado?<span class="icon">▾</span></summary>
+        <div class="ans">Pode. O plano gratuito é para sempre, com até 3 programas conectados e funcionalidades essenciais. O Pro é opcional, para quem quer recursos avançados como radar de oportunidades e simulador completo.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Meus dados ficam seguros?<span class="icon">▾</span></summary>
+        <div class="ans">Sim. Usamos criptografia em todas as camadas, seguimos a LGPD e você pode excluir sua conta e seus dados a qualquer momento, com um clique. A Gest Miles nunca vende ou compartilha suas informações.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FINAL CTA ===== -->
+<section class="final" id="cadastro">
+  <div class="inner">
+    <h2>Comece a transformar milhas em viagens hoje.</h2>
+    <p>É grátis para começar. Em 2 minutos, suas milhas já vão estar sob controle.</p>
+    <div class="ctas">
+      <a href="#start" class="btn btn-primary btn-lg">Começar grátis <span class="arrow">→</span></a>
+      <a href="#contato" class="btn btn-ghost btn-lg">Falar com a gente</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <a href="#" class="brand" aria-label="Gest Miles">
+          <span class="brand-mark"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 17 L9 11 L13 14 L21 6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="6" r="1.6" fill="white"/></svg></span>
+          Gest Miles
+        </a>
+        <p>Gestão de milhas e pontos de fidelidade. Organize carteiras, acompanhe vencimentos, planeje resgates e nunca mais perca uma oportunidade.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Produto</h4>
+        <ul>
+          <li><a href="#beneficios">Benefícios</a></li>
+          <li><a href="#como">Como funciona</a></li>
+          <li><a href="#planos">Planos</a></li>
+          <li><a href="#para-quem">Para quem é</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#">Sobre</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Contato</a></li>
+          <li><a href="#">Trabalhe conosco</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Termos de uso</a></li>
+          <li><a href="#">Política de privacidade</a></li>
+          <li><a href="#">LGPD</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Gest Miles. Todos os direitos reservados.</span>
+      <span>Feito com 💜 no Brasil</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// nav scroll state
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+// reveal on scroll
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('section .container > *, .bento-card, .step, .problem-card, .aud-card, .plan').forEach(el => {
+  el.classList.add('reveal'); io.observe(el);
+});
+</script>
+</body>
+</html>
