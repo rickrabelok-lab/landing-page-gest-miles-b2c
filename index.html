@@ -1536,6 +1536,13 @@ footer p { color: rgba(255,255,255,.6); font-size: 14px; max-width: 320px; margi
             <p class="err" id="g-telefone-err">Informe um WhatsApp com DDD — pelo menos 10 dígitos.</p>
           </div>
 
+          <div class="field">
+            <label for="g-email">E-mail <span aria-hidden="true">*</span></label>
+            <input id="g-email" name="email" type="email" maxlength="320" autocomplete="email" required aria-describedby="g-email-hint g-email-err" />
+            <p class="hint" id="g-email-hint">É com ele que a gente cria o seu acesso.</p>
+            <p class="err" id="g-email-err">Informe um e-mail válido — é ele que vira o seu login.</p>
+          </div>
+
           <div class="row2">
             <div class="field">
               <label for="g-clientes">Quantos clientes <span class="opt">(opcional)</span></label>
@@ -1695,12 +1702,17 @@ document.querySelectorAll('section .container > *, .bento-card, .step, .problem-
     var ok = true;
     var empresa = document.getElementById('g-empresa').value.trim();
     var telefone = soDigitos(document.getElementById('g-telefone').value);
+    var email = document.getElementById('g-email').value.trim();
     var consent = document.getElementById('g-consent').checked;
 
-    erroCampo('g-empresa', false); erroCampo('g-telefone', false); erroCampo('g-consent', false);
+    erroCampo('g-empresa', false); erroCampo('g-telefone', false);
+    erroCampo('g-email', false); erroCampo('g-consent', false);
 
     if (!empresa) { erroCampo('g-empresa', true); ok = false; }
     if (telefone.length < 10) { erroCampo('g-telefone', true); ok = false; }
+    /* Mesma forma que o servidor exige. Ele revalida e e ele que vale — isto
+       aqui so evita mandar algo que ja se sabe que vai voltar recusado. */
+    if (!/^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(email)) { erroCampo('g-email', true); ok = false; }
     if (!consent) { erroCampo('g-consent', true); ok = false; }
 
     if (!ok) {
@@ -1719,6 +1731,7 @@ document.querySelectorAll('section .container > *, .bento-card, .step, .problem-
     rede:            'Não conseguimos falar com o servidor. Verifique sua conexão e tente de novo.',
     servidor:        'Tivemos um problema do nosso lado. Tente de novo em alguns minutos — se persistir, chame a gente pelo WhatsApp.',
     validacao:       'Confira os campos: algum dado não foi aceito.',
+    invalid_email:   'O e-mail não parece válido. Confira e tente de novo.',
     sem_captcha:     'A verificação de segurança não carregou. Desative bloqueadores para este site e recarregue a página.'
   };
   function fraseDe(codigo) {
@@ -1726,6 +1739,7 @@ document.querySelectorAll('section .container > *, .bento-card, .step, .problem-
     if (codigo.indexOf('captcha') !== -1) return FRASES.captcha_failed;
     if (codigo.indexOf('rate_limited') !== -1) return FRASES.rate_limited;
     if (codigo.indexOf('duplicada') !== -1) return FRASES.duplicada;
+    if (codigo.indexOf('invalid_email') !== -1) return FRASES.invalid_email;
     if (codigo.indexOf('gestora_solicitacao_') === 0) return FRASES.validacao;
     return FRASES.servidor;
   }
@@ -1755,6 +1769,7 @@ document.querySelectorAll('section .container > *, .bento-card, .step, .problem-
     var payload = {
       p_nome_empresa: document.getElementById('g-empresa').value.trim(),
       p_telefone: document.getElementById('g-telefone').value.trim(),
+      p_email: document.getElementById('g-email').value.trim(),
       p_cnpj: document.getElementById('g-cnpj').value.trim() || null,
       p_num_clientes: inteiroOuNulo(document.getElementById('g-clientes').value),
       p_num_pessoas: inteiroOuNulo(document.getElementById('g-pessoas').value),
