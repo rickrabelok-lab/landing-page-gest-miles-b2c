@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gest Miles para gestoras de milhas — abrir acesso</title>
+<meta name="description" content="O Gest Miles para quem gerencia carteiras de milhas de terceiros: cada cliente com seus programas, saldos, vencimentos e emissoes num painel so, com a sua equipe dentro. Conte sobre a sua operacao e a gente entra em contato." />
+<!-- Pagina de link direto (WhatsApp), nao de busca organica -- ver o registro do S-102. -->
+<meta name="robots" content="noindex, follow" />
+<link rel="canonical" href="https://www.gestmiles.com.br/gestaodemilhas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<style>
+:root {
+  --bg: #F7F7F8;
+  --surface: #FFFFFF;
+  --ink: #1F1F1F;
+  --ink-2: #6B6B6B;
+  --line: #ECECEC;
+  --line-2: #F2F2F4;
+  --primary: #8A05BE;
+  --primary-dark: #6A00A3;
+  --primary-soft: #B56CFF;
+  --primary-50: #FBF4FF;
+  --primary-100: #F2E2FF;
+  --grad: linear-gradient(135deg, #8A05BE 0%, #9E2FD4 50%, #B56CFF 100%);
+  --grad-soft: linear-gradient(135deg, #FBF4FF 0%, #F2E2FF 100%);
+  --shadow-sm: 0 1px 2px rgba(15, 5, 25, 0.04), 0 2px 6px rgba(15, 5, 25, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 5, 25, 0.06), 0 8px 28px rgba(15, 5, 25, 0.06);
+  --shadow-lg: 0 10px 30px rgba(80, 0, 120, 0.10), 0 30px 80px rgba(80, 0, 120, 0.10);
+  --shadow-purple: 0 18px 48px rgba(138, 5, 190, 0.28);
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 18px;
+  --r-xl: 24px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, h4 { font-family: "Space Grotesk", sans-serif; font-weight: 600; letter-spacing: -0.02em; margin: 0; color: var(--ink); }
+h1 { font-size: clamp(40px, 6.4vw, 76px); line-height: 1.02; letter-spacing: -0.035em; }
+h2 { font-size: clamp(28px, 3.6vw, 48px); line-height: 1.08; letter-spacing: -0.028em; }
+h3 { font-size: 20px; line-height: 1.25; }
+p { margin: 0; color: var(--ink-2); }
+a { color: inherit; text-decoration: none; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 18px;
+  border-radius: 999px;
+  font-weight: 500; font-size: 14.5px;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+  white-space: nowrap;
+}
+.btn-primary { background: var(--grad); color: #fff; box-shadow: var(--shadow-purple); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 22px 56px rgba(138, 5, 190, 0.34); }
+.btn-ghost { color: var(--ink); border: 1px solid var(--line); background: var(--surface); }
+.btn-ghost:hover { border-color: #d5d5da; }
+.btn-link { color: var(--ink); padding: 10px 4px; font-size: 14.5px; }
+.btn-link:hover { color: var(--primary); }
+.btn-lg { padding: 14px 22px; font-size: 15.5px; }
+.btn .arrow { transition: transform .2s ease; }
+.btn:hover .arrow { transform: translateX(2px); }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 14px 6px 8px;
+  font-size: 13px; color: var(--ink-2);
+  box-shadow: var(--shadow-sm);
+}
+.eyebrow .dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--grad);
+  display: grid; place-items: center;
+  color: #fff; font-size: 11px; font-weight: 600;
+}
+
+/* ===== Entrada de gestoras (S-102) ===== */
+.gestoras { background: var(--surface); border-top: 1px solid var(--line); padding: 84px 0; }
+.gestoras .container { max-width: 1100px; }
+.gestoras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+.gestoras-copy h2 { margin: 0 0 16px; }
+.gestoras-copy p { color: var(--muted, #6B6B6B); font-size: 16.5px; line-height: 1.65; margin: 0 0 20px; }
+.gestoras-copy ul { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 12px; }
+.gestoras-copy li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: var(--ink); }
+.gestoras-copy li svg { flex: 0 0 auto; margin-top: 3px; }
+.gform { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 28px; box-shadow: var(--shadow-md); }
+.gform .field { margin-bottom: 18px; }
+.gform label { display: block; font-size: 13.5px; font-weight: 600; color: var(--ink); margin-bottom: 7px; }
+.gform .opt { font-weight: 400; color: var(--muted, #6B6B6B); }
+.gform input { width: 100%; box-sizing: border-box; padding: 12px 14px; font: inherit; font-size: 15px; color: var(--ink);
+  background: #fff; border: 1px solid var(--line); border-radius: var(--r-sm); transition: border-color .15s, box-shadow .15s; }
+.gform input:hover { border-color: #D8D8D8; }
+.gform input:focus-visible { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(138, 5, 190, .16); }
+.gform input[aria-invalid="true"] { border-color: #C0272D; }
+.gform input[aria-invalid="true"]:focus-visible { box-shadow: 0 0 0 3px rgba(192, 39, 45, .16); }
+.gform .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.gform .hint { font-size: 12.5px; color: var(--muted, #6B6B6B); margin-top: 6px; }
+.gform .err { font-size: 12.5px; color: #C0272D; margin-top: 6px; display: none; }
+.gform .err.on { display: block; }
+.gform .consent { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--muted, #6B6B6B); line-height: 1.5; margin: 4px 0 20px; }
+.gform .consent input { width: auto; flex: 0 0 auto; margin-top: 2px; }
+.gform button[type="submit"] { width: 100%; justify-content: center; }
+.gform button[disabled] { opacity: .6; cursor: not-allowed; transform: none !important; }
+.gform .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.gform .cf { margin: 4px 0 18px; min-height: 65px; }
+.gmsg { border-radius: var(--r-sm); padding: 14px 16px; font-size: 14.5px; line-height: 1.55; margin-bottom: 18px; display: none; }
+.gmsg.on { display: block; }
+.gmsg.ok { background: #EAF7EE; border: 1px solid #B7E3C4; color: #17632F; }
+.gmsg.bad { background: #FDEDEE; border: 1px solid #F3C2C4; color: #92211F; }
+.gform-done { text-align: center; padding: 18px 4px; }
+.gform-done h3 { margin: 0 0 10px; font-size: 20px; }
+.gform-done p { color: var(--muted, #6B6B6B); font-size: 15px; line-height: 1.6; margin: 0; }
+@media (max-width: 900px) {
+  .gestoras-grid { grid-template-columns: 1fr; gap: 36px; }
+  .gform .row2 { grid-template-columns: 1fr; }
+}
+
+/* ===== Casca desta pagina (unico CSS novo; o resto foi MOVIDO da landing) ===== */
+.pg-nav { border-bottom: 1px solid var(--line); background: var(--surface); }
+.pg-nav .container { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+.pg-brand { display: inline-flex; align-items: center; gap: 10px; font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 17px; color: var(--ink); }
+.pg-brand .brand-mark { width: 28px; height: 28px; border-radius: 8px; background: var(--grad); display: grid; place-items: center; }
+.pg-voltar { font-size: 14.5px; color: var(--muted, #6B6B6B); }
+.pg-voltar:hover { color: var(--primary); }
+.gestoras { border-top: 0; }
+.pg-foot { border-top: 1px solid var(--line); padding: 28px 0; font-size: 13px; color: var(--muted, #6B6B6B); }
+.pg-foot .container { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: space-between; }
+.pg-foot a { text-decoration: underline; text-underline-offset: 3px; }
+.pg-foot a:hover { color: var(--primary); }
+@media (max-width: 640px) {
+  .pg-nav .container { height: 60px; }
+  .pg-nav .pg-voltar { display: none; }
+}
+
+</style>
+</head>
+<body>
+
+<header class="pg-nav">
+  <div class="container">
+      <a href="/" class="pg-brand" aria-label="Gest Miles — voltar ao site">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 17 L9 11 L13 14 L21 6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="6" r="1.6" fill="white"/></svg>
+        </span>
+        Gest Miles
+      </a>
+    <a class="pg-voltar" href="/">Conhecer o Gest Miles</a>
+  </div>
+</header>
+
+<main>
+<section class="gestoras" id="gestoras">
+  <div class="container">
+    <div class="gestoras-grid">
+      <div class="gestoras-copy">
+        <span class="eyebrow">Para gestoras de milhas</span>
+        <h2>Você cuida das milhas dos seus clientes?</h2>
+        <p>O Gest Miles tem uma versão para quem gerencia carteiras de terceiros: cada cliente com seus programas, saldos, vencimentos e emissões — num painel só, com a sua equipe dentro.</p>
+        <p>Conte um pouco sobre a sua operação e a gente entra em contato para abrir o seu acesso.</p>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6 L9 17 L4 12" stroke="#8A05BE" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Carteira por cliente, com saldo e vencimento por programa</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6 L9 17 L4 12" stroke="#8A05BE" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Sua equipe com acessos separados por papel</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6 L9 17 L4 12" stroke="#8A05BE" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Histórico de emissões e economia gerada por cliente</span></li>
+        </ul>
+      </div>
+
+      <form class="gform" id="gform" novalidate>
+        <div class="gmsg" id="gmsg" role="alert" aria-live="polite"></div>
+
+        <div id="gform-fields">
+          <div class="field">
+            <label for="g-empresa">Nome da sua operação <span aria-hidden="true">*</span></label>
+            <input id="g-empresa" name="empresa" type="text" maxlength="240" autocomplete="organization" required aria-describedby="g-empresa-err" />
+            <p class="err" id="g-empresa-err">Diga o nome da sua operação para a gente saber com quem falar.</p>
+          </div>
+
+          <div class="field">
+            <label for="g-telefone">WhatsApp <span aria-hidden="true">*</span></label>
+            <input id="g-telefone" name="telefone" type="tel" inputmode="tel" maxlength="80" autocomplete="tel" required aria-describedby="g-telefone-hint g-telefone-err" />
+            <p class="hint" id="g-telefone-hint">É por aqui que a gente responde. Com DDD.</p>
+            <p class="err" id="g-telefone-err">Informe um WhatsApp com DDD — pelo menos 10 dígitos.</p>
+          </div>
+
+          <div class="field">
+            <label for="g-email">E-mail <span aria-hidden="true">*</span></label>
+            <input id="g-email" name="email" type="email" maxlength="320" autocomplete="email" required aria-describedby="g-email-hint g-email-err" />
+            <p class="hint" id="g-email-hint">É com ele que a gente cria o seu acesso.</p>
+            <p class="err" id="g-email-err">Informe um e-mail válido — é ele que vira o seu login.</p>
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label for="g-clientes">Quantos clientes <span class="opt">(opcional)</span></label>
+              <input id="g-clientes" name="clientes" type="text" inputmode="numeric" maxlength="6" />
+            </div>
+            <div class="field">
+              <label for="g-pessoas">Quantas pessoas na equipe <span class="opt">(opcional)</span></label>
+              <input id="g-pessoas" name="pessoas" type="text" inputmode="numeric" maxlength="6" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="g-cnpj">CNPJ <span class="opt">(opcional)</span></label>
+            <input id="g-cnpj" name="cnpj" type="text" inputmode="numeric" maxlength="24" />
+          </div>
+
+          <div class="hp" aria-hidden="true">
+            <label for="g-site">Não preencha este campo</label>
+            <input id="g-site" name="site" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <label class="consent" for="g-consent">
+            <input id="g-consent" name="consent" type="checkbox" required aria-describedby="g-consent-err" />
+            <span id="g-consent-texto">Autorizo o Gest Miles a usar os dados acima para entrar em contato comigo sobre a abertura de acesso.</span>
+          </label>
+          <p class="err" id="g-consent-err" style="margin-top:-14px">Precisamos da sua autorização para entrar em contato.</p>
+
+          <div class="cf" id="g-cf"></div>
+
+          <button class="btn btn-primary btn-lg" type="submit" id="g-submit">Quero abrir meu acesso <span class="arrow">→</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="pg-foot">
+  <div class="container">
+    <span>&copy; 2026 Gest Miles</span>
+    <span>
+      <a href="https://app.gestmiles.com.br/termos">Termos de uso</a> &middot;
+      <a href="https://app.gestmiles.com.br/privacidade">Politica de privacidade</a> &middot;
+      <a href="https://app.gestmiles.com.br/cookies">Cookies</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+/* ===== Entrada de gestoras (S-102) — landing -> Edge -> RPC ===== */
+(function () {
+  var ENDPOINT = "https://jntkpcjmmnaghmimdcam.supabase.co/functions/v1/gestora-solicitacao";
+  var SITEKEY  = "0x4AAAAAADqnu7aoyaapbNbk";
+
+  var form = document.getElementById('gform');
+  if (!form) return;
+  var btn      = document.getElementById('g-submit');
+  var msg      = document.getElementById('gmsg');
+  var fields   = document.getElementById('gform-fields');
+  var cfBox    = document.getElementById('g-cf');
+  var renderedAt = Date.now();
+  var cfWidgetId = null;
+  var enviando = false;
+
+  /* O widget do Turnstile so renderiza quando o script externo chega. Se ele
+     nao chegar (bloqueador, rede), o envio falha no siteverify — entao dizemos
+     isso em vez de deixar a pessoa clicar num botao que nunca funciona. */
+  function montarCaptcha() {
+    if (!window.turnstile || cfWidgetId !== null) return;
+    cfWidgetId = window.turnstile.render(cfBox, { sitekey: SITEKEY, theme: 'light' });
+  }
+  var tentativas = 0;
+  var timer = setInterval(function () {
+    tentativas++;
+    if (window.turnstile) { clearInterval(timer); montarCaptcha(); }
+    else if (tentativas > 40) { clearInterval(timer); }
+  }, 250);
+
+  function mostrar(tipo, texto) {
+    msg.textContent = texto;
+    msg.className = 'gmsg on ' + tipo;
+    msg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  function limparMsg() { msg.className = 'gmsg'; msg.textContent = ''; }
+
+  function erroCampo(id, ligado) {
+    var input = document.getElementById(id);
+    var err = document.getElementById(id + '-err');
+    if (input) input.setAttribute('aria-invalid', ligado ? 'true' : 'false');
+    if (err) err.className = ligado ? 'err on' : 'err';
+    return input;
+  }
+
+  function soDigitos(v) { return (v || '').replace(/[^0-9]/g, ''); }
+  function inteiroOuNulo(v) {
+    var d = soDigitos(v);
+    if (!d) return null;
+    var n = parseInt(d, 10);
+    return isFinite(n) ? n : null;
+  }
+
+  /* Validacao do FRONT — atrito, nao guarda. O banco so exige nome e telefone;
+     tudo que checamos aqui a mais e para a pessoa nao mandar algo que o
+     servidor vai recusar. O servidor recusa de novo, e e ele que vale. */
+  function validar() {
+    var ok = true;
+    var empresa = document.getElementById('g-empresa').value.trim();
+    var telefone = soDigitos(document.getElementById('g-telefone').value);
+    var email = document.getElementById('g-email').value.trim();
+    var consent = document.getElementById('g-consent').checked;
+
+    erroCampo('g-empresa', false); erroCampo('g-telefone', false);
+    erroCampo('g-email', false); erroCampo('g-consent', false);
+
+    if (!empresa) { erroCampo('g-empresa', true); ok = false; }
+    if (telefone.length < 10) { erroCampo('g-telefone', true); ok = false; }
+    /* Mesma forma que o servidor exige. Ele revalida e e ele que vale — isto
+       aqui so evita mandar algo que ja se sabe que vai voltar recusado. */
+    if (!/^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(email)) { erroCampo('g-email', true); ok = false; }
+    if (!consent) { erroCampo('g-consent', true); ok = false; }
+
+    if (!ok) {
+      var primeiro = form.querySelector('[aria-invalid="true"]');
+      if (primeiro) primeiro.focus();
+    }
+    return ok;
+  }
+
+  /* Uma frase por causa. "Erro ao enviar" manda a pessoa embora e nao deixa
+     como diagnosticar — cada ramo abaixo diz o que fazer a seguir. */
+  var FRASES = {
+    captcha_failed:  'A verificação de segurança não passou. Recarregue a página e tente de novo.',
+    rate_limited:    'Recebemos vários envios deste mesmo lugar agora há pouco. Tente novamente daqui a pouco.',
+    duplicada:       'Já recebemos um pedido com este contato nas últimas 24 horas. A gente já vai responder.',
+    rede:            'Não conseguimos falar com o servidor. Verifique sua conexão e tente de novo.',
+    servidor:        'Tivemos um problema do nosso lado. Tente de novo em alguns minutos — se persistir, chame a gente pelo WhatsApp.',
+    validacao:       'Confira os campos: algum dado não foi aceito.',
+    invalid_email:   'O e-mail não parece válido. Confira e tente de novo.',
+    sem_captcha:     'A verificação de segurança não carregou. Desative bloqueadores para este site e recarregue a página.'
+  };
+  function fraseDe(codigo) {
+    if (!codigo) return FRASES.servidor;
+    if (codigo.indexOf('captcha') !== -1) return FRASES.captcha_failed;
+    if (codigo.indexOf('rate_limited') !== -1) return FRASES.rate_limited;
+    if (codigo.indexOf('duplicada') !== -1) return FRASES.duplicada;
+    if (codigo.indexOf('invalid_email') !== -1) return FRASES.invalid_email;
+    if (codigo.indexOf('gestora_solicitacao_') === 0) return FRASES.validacao;
+    return FRASES.servidor;
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (enviando) return;              /* duplo envio: a RPC nao tem unique, e
+                                          dois cliques criariam duas linhas da
+                                          mesma pessoa na caixa de entrada. */
+    limparMsg();
+    if (!validar()) return;
+
+    var token = window.turnstile && cfWidgetId !== null
+      ? window.turnstile.getResponse(cfWidgetId)
+      : '';
+    if (!token) { mostrar('bad', FRASES.sem_captcha); return; }
+
+    enviando = true;
+    btn.disabled = true;
+    /* Guardamos os NÓS do rótulo, não o innerHTML: restaurar por string
+       reintroduziria parsing de HTML onde não é preciso nenhum. */
+    var rotulo = Array.prototype.slice.call(btn.childNodes);
+    btn.textContent = 'Enviando…';
+
+    /* POST com corpo. Nada de query string: o telefone e o nome sao dados de
+       uma pessoa e nao entram em URL (que vaza em log, referrer e historico). */
+    var payload = {
+      p_nome_empresa: document.getElementById('g-empresa').value.trim(),
+      p_telefone: document.getElementById('g-telefone').value.trim(),
+      p_email: document.getElementById('g-email').value.trim(),
+      p_cnpj: document.getElementById('g-cnpj').value.trim() || null,
+      p_num_clientes: inteiroOuNulo(document.getElementById('g-clientes').value),
+      p_num_pessoas: inteiroOuNulo(document.getElementById('g-pessoas').value),
+      p_origem: 'landing-b2c',
+      p_consent_texto: document.getElementById('g-consent-texto').textContent.trim(),
+      p_hp_field: document.getElementById('g-site').value,
+      p_rendered_at_ms: renderedAt
+    };
+
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ turnstileToken: token, payload: payload })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; })
+          .then(function (body) { return { status: res.status, body: body }; });
+      })
+      .then(function (r) {
+        if (r.status >= 200 && r.status < 300 && r.body && r.body.ok) {
+          fields.style.display = 'none';
+          limparMsg();
+          var done = document.createElement('div');
+          done.className = 'gform-done';
+          var h = document.createElement('h3');
+          h.textContent = 'Recebemos o seu pedido.';
+          var p = document.createElement('p');
+          p.textContent = 'A gente entra em contato pelo WhatsApp que você informou para abrir o seu acesso.';
+          done.appendChild(h); done.appendChild(p);
+          form.appendChild(done);
+          done.setAttribute('tabindex', '-1');
+          done.focus();
+          return;
+        }
+        /* Nao logamos o corpo: ele carrega o que a pessoa digitou. */
+        mostrar('bad', fraseDe(r.body && r.body.error));
+        soltar();
+      })
+      .catch(function () {
+        mostrar('bad', FRASES.rede);
+        soltar();
+      });
+
+    function soltar() {
+      enviando = false;
+      btn.disabled = false;
+      btn.textContent = '';
+      rotulo.forEach(function (n) { btn.appendChild(n); });
+      if (window.turnstile && cfWidgetId !== null) window.turnstile.reset(cfWidgetId);
+    }
+  });
+})();
+</script>
+</body>
+</html>
